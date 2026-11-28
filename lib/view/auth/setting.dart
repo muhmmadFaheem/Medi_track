@@ -1,156 +1,126 @@
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import '../../../core/constants/app_colors.dart';
-// import '../controllers/home_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:medi_track/constant/app_colors.dart';
 
-// class SettingsView extends StatelessWidget {
-//   SettingsView({super.key});
-//   final controller = Get.find<HomeController>();
+class SettingsView extends StatelessWidget {
+  SettingsView({super.key});
+  final isArabic = false.obs;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: AppColors.background,
-//       appBar: AppBar(
-//         backgroundColor: AppColors.primaryTeal,
-//         foregroundColor: AppColors.white,
-//         title: const Text('Settings',
-//             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-//         centerTitle: true,
-//       ),
-//       body: ListView(
-//         padding: const EdgeInsets.all(20),
-//         children: [
-//           // Profile Card
-//           Container(
-//             padding: const EdgeInsets.all(16),
-//             decoration: BoxDecoration(
-//               color: AppColors.white,
-//               borderRadius: BorderRadius.circular(16),
-//               border: Border.all(color: AppColors.borderGrey),
-//             ),
-//             child: const Row(
-//               children: [
-//                 CircleAvatar(
-//                   radius: 26,
-//                   backgroundColor: AppColors.primaryTeal,
-//                   child: Text(
-//                     'MF',
-//                     style: TextStyle(
-//                       color: AppColors.white,
-//                       fontWeight: FontWeight.bold,
-//                       fontSize: 16,
-//                     ),
-//                   ),
-//                 ),
-//                 SizedBox(width: 14),
-//                 Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     Text(
-//                       'Muhammad Faheem',
-//                       style: TextStyle(
-//                         fontWeight: FontWeight.bold,
-//                         fontSize: 16,
-//                         color: AppColors.textDark,
-//                       ),
-//                     ),
-//                     SizedBox(height: 4),
-//                     Text(
-//                       'Patient ID: #MT-9042',
-//                       style: TextStyle(
-//                         fontSize: 12,
-//                         color: AppColors.textGrey,
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//           ),
-//           const SizedBox(height: 20),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(backgroundColor: AppColors.primaryTeal, centerTitle: true, title: const Text("Settings", style: TextStyle(color: Colors.white))),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          // Patient Profile Card
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+            child: Column(
+              children: [
+                const Row(
+                  children: [
+                    CircleAvatar(radius: 24, backgroundColor: AppColors.lightMintBg, child: Text("MA", style: TextStyle(color: AppColors.primaryTeal, fontWeight: FontWeight.bold))),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Muhammad Al-Rashidi", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                          Text("Patient ID: MR-00421", style: TextStyle(color: AppColors.textGrey, fontSize: 13)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(color: AppColors.dangerRedBg, borderRadius: BorderRadius.circular(20)),
+                      child: const Text("Blood Group: B+", style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(color: const Color(0xFFFEF3C7), borderRadius: BorderRadius.circular(20)),
+                      child: const Text("Known Allergies: Penicillin", style: TextStyle(color: AppColors.warningAmber, fontSize: 12, fontWeight: FontWeight.w600)),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
 
-//           // Language / اللغة Toggle
-//           Obx(
-//             () => _buildSettingTile(
-//               icon: Icons.language_rounded,
-//               title: 'Language / اللغة',
-//               subtitle:
-//                   controller.isArabic.value ? 'العربية (Gulf)' : 'English (US)',
-//               trailing: Switch(
-//                 value: controller.isArabic.value,
-//                 activeColor: AppColors.primaryTeal,
-//                 onChanged: (val) => controller.isArabic.value = val,
-//               ),
-//             ),
-//           ),
-//           const SizedBox(height: 12),
+          // Language RTL Toggle
+          const Text("PREFERENCES", style: TextStyle(color: AppColors.textGrey, fontSize: 12, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+            child: Obx(() => SwitchListTile(
+                  secondary: const Icon(Icons.translate, color: AppColors.primaryTeal),
+                  title: const Text("Language / اللغة", style: TextStyle(fontWeight: FontWeight.w600)),
+                  subtitle: Text(isArabic.value ? "Arabic (RTL) enabled" : "English (LTR) enabled"),
+                  value: isArabic.value,
+                  activeColor: AppColors.primaryTeal,
+                  onChanged: (val) {
+                    isArabic.value = val;
+                    Get.updateLocale(val ? const Locale('ar', 'AE') : const Locale('en', 'US'));
+                  },
+                )),
+          ),
+          const SizedBox(height: 20),
 
-//           _buildSettingTile(
-//             icon: Icons.emergency_share_rounded,
-//             title: 'Caregiver Emergency Alert',
-//             subtitle: 'Notify family if a critical dose is missed',
-//             trailing: const Icon(Icons.chevron_right, color: AppColors.textGrey),
-//           ),
-//           const SizedBox(height: 12),
+          // Caregiver & Report
+          const Text("CAREGIVER & REPORTS", style: TextStyle(color: AppColors.textGrey, fontSize: 12, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.notifications_active_outlined, color: AppColors.primaryTeal),
+                  title: const Text("Caregiver Emergency Alert", style: TextStyle(fontWeight: FontWeight.w600)),
+                  subtitle: const Text("Dr. Fatima Hassan — +971 50 123 4567"),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Get.snackbar("Caregiver Alert", "Emergency contact configured"),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.picture_as_pdf_outlined, color: AppColors.primaryTeal),
+                  title: const Text("Export Health Report (PDF)", style: TextStyle(fontWeight: FontWeight.w600)),
+                  subtitle: const Text("Last export: 12 June 2025"),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Get.snackbar("PDF Export", "Generating medication adherence report..."),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
 
-//           _buildSettingTile(
-//             icon: Icons.picture_as_pdf_rounded,
-//             title: 'Export Health Report (PDF)',
-//             subtitle: 'Download adherence & drug log for your doctor',
-//             trailing: const Icon(Icons.download_rounded,
-//                 color: AppColors.primaryTeal),
-//           ),
-//           const SizedBox(height: 12),
-
-//           _buildSettingTile(
-//             icon: Icons.verified_user_outlined,
-//             title: 'Clinical Disclaimer',
-//             subtitle: 'Biotech & pharmacology reference standards',
-//             trailing: const Icon(Icons.chevron_right, color: AppColors.textGrey),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-//   Widget _buildSettingTile({
-//     required IconData icon,
-//     required String title,
-//     required String subtitle,
-//     required Widget trailing,
-//   }) {
-//     return Container(
-//       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-//       decoration: BoxDecoration(
-//         color: AppColors.white,
-//         borderRadius: BorderRadius.circular(14),
-//         border: Border.all(color: AppColors.borderGrey),
-//       ),
-//       child: ListTile(
-//         contentPadding: EdgeInsets.zero,
-//         leading: Container(
-//           padding: const EdgeInsets.all(10),
-//           decoration: BoxDecoration(
-//             color: AppColors.lightMintBg,
-//             borderRadius: BorderRadius.circular(10),
-//           ),
-//           child: Icon(icon, color: AppColors.primaryTeal, size: 22),
-//         ),
-//         title: Text(
-//           title,
-//           style: const TextStyle(
-//             fontWeight: FontWeight.bold,
-//             fontSize: 14,
-//             color: AppColors.textDark,
-//           ),
-//         ),
-//         subtitle: Text(
-//           subtitle,
-//           style: const TextStyle(fontSize: 12, color: AppColors.textGrey),
-//         ),
-//         trailing: trailing,
-//       ),
-//     );
-//   }
-// }
+          // Clinical Disclaimer
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+            child: const Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.verified_user_outlined, color: AppColors.primaryTeal),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    "Clinical Disclaimer: This app is for informational purposes only and does not replace professional medical advice. Always consult a licensed healthcare provider.",
+                    style: TextStyle(color: AppColors.textGrey, fontSize: 12, height: 1.4),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:medi_track/model/medication_model.dart';
 
 class HiveService {
   static const String medBoxName = 'medications_box';
@@ -6,12 +7,12 @@ class HiveService {
 
   static Future<void> init() async {
     await Hive.initFlutter();
-   // Hive.registerAdapter(MedicationAdapter());
-  //  await Hive.openBox<MedicationModel>(medBoxName);
+    Hive.registerAdapter(MedicationAdapter());
+    await Hive.openBox<MedicationModel>(medBoxName);
     await Hive.openBox(userBoxName);
   }
 
- // static Box<MedicationModel> get medBox => Hive.box<MedicationModel>(medBoxName);
+  static Box<MedicationModel> get medBox => Hive.box<MedicationModel>(medBoxName);
   static Box get userBox => Hive.box(userBoxName);
 
   // Auth Helper
@@ -22,9 +23,8 @@ class HiveService {
     await userBox.put('isLoggedIn', true);
   }
 
-  // CRUD for Medications
- // static Future<void> addMedication(MedicationModel med) async => await medBox.put(med.id, med);
- // static List<MedicationModel> getAllMedications() => medBox.values.toList();
-//  static Future<void> updateMedication(MedicationModel med) async => await medBox.put(med.id, med);
- // static Future<void> deleteMedication(String id) async => await medBox.delete(id);
+  static Future<void> addMedication(MedicationModel med) async => await medBox.put(med.id, med);
+  static List<MedicationModel> getAllMedications() => medBox.values.toList();
+  static Future<void> updateMedication(MedicationModel med) async => await medBox.put(med.id, med);
+  static Future<void> deleteMedication(String id) async => await medBox.delete(id);
 }
